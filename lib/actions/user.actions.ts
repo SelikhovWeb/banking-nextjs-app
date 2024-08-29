@@ -96,7 +96,6 @@ export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
     const user = await account.get();
-    console.log("user", user);
     return parseStringify(user);
   } catch (error) {
     console.log(error);
@@ -129,7 +128,7 @@ export const createBankAccount = async ({
   accountId,
   accessToken,
   fundingSourceUrl,
-  sharableId,
+  shareableId,
 }: createBankAccountProps) => {
   try {
     const { database } = await createAdminClient();
@@ -143,9 +142,11 @@ export const createBankAccount = async ({
         accountId,
         accessToken,
         fundingSourceUrl,
-        sharableId,
+        shareableId,
       }
     );
+
+    console.log("bankAccount", bankAccount);
 
     return parseStringify(bankAccount);
   } catch (error) {
@@ -197,7 +198,7 @@ export const exchangePublicToken = async ({
       accountId: accountData.account_id,
       accessToken,
       fundingSourceUrl,
-      sharableId: encryptId(accountData.account_id),
+      shareableId: encryptId(accountData.account_id),
     });
 
     // revalidate the path to reflect the changes

@@ -13,10 +13,9 @@ const SidebarFooter = ({ user, type = "desktop" }: FooterProps) => {
         router.push("/sign-in");
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
-  console.log(user);
   return (
     <footer className="footer">
       <div className={type === "mobile" ? "footer_name-mobile" : "footer_name"}>

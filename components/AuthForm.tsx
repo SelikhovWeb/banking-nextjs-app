@@ -57,10 +57,10 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
             setUser(res);
             router.push("/");
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

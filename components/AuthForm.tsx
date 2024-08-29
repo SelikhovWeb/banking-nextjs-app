@@ -12,6 +12,7 @@ import CustomInput from "./CustomInput";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/actions/user.actions";
+import PlaidLink from "./PlaidLink";
 
 const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
   const router = useRouter();
@@ -32,10 +33,21 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      console.log(values);
-      // sign up with Appwrite and get plaid token
       if (type === "sign-up") {
-        const newUser = await signUp(values);
+        const userData = {
+          firstName: values.firstName!,
+          lastName: values.lastName!,
+          email: values.email,
+          password: values.password,
+          address1: values.address1!,
+          city: values.city!,
+          state: values.state!,
+          postalCode: values.postalCode!,
+          ssn: values.ssn!,
+          dateOfBirth: values.dateOfBirth!,
+        };
+
+        const newUser = await signUp(userData);
         setUser(newUser);
       }
 
@@ -78,7 +90,9 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
         </div>
       </header>
       {user ? (
-        <div className="flex flex-col gap-4 ">{/* TODO: PLAID LINK */}</div>
+        <div className="flex flex-col gap-4 ">
+          <PlaidLink user={user} variant="primary" />
+        </div>
       ) : (
         <>
           <Form {...form}>
@@ -132,6 +146,7 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
                       label="SSN"
                       placeholder="ex: 123-45-6789"
                     />
+                    {/* TODO: add regex validation to this field and automatically add dashes  */}
                     <CustomInput
                       control={form.control}
                       name="dateOfBirth"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
+import { RootStoreProvider } from "@/stores/storeContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${ibmPlexSerif.variable}`}>
-        {children}
+        <RootStoreProvider>{children}</RootStoreProvider>
       </body>
     </html>
   );

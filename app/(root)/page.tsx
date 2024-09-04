@@ -2,42 +2,33 @@
 import HeaderBox from "@/components/HeaderBox";
 import RightSidebar from "@/components/RightSidebar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
-import { getLoggedInUser } from "@/lib/actions/user.actions";
-import { getAccounts, getAccount } from "@/lib/actions/bank.actions";
+import { getAccount } from "@/lib/actions/bank.actions";
 import RecentTransactions from "@/components/RecentTransactions";
 import React from "react";
 import { log } from "console";
 import { Loader2 } from "lucide-react";
+import { useRootStore } from "@/stores/storeContext";
+import { observer } from "mobx-react-lite";
 
-const Home = ({ searchParams: { id, page } }: SearchParamProps) => {
-  const [loggedInUser, setLoggedInUser] = React.useState<any | null>(null);
-  const [accounts, setAccounts] = React.useState<any | null>(null);
-  const [account, setAccount] = React.useState<any | null>(null);
+const Home = observer(({ searchParams: { id, page } }: SearchParamProps) => {
+  const { userStore, accountStore } = useRootStore();
+
+  const { loadAccounts, accounts, loadAccount, account } = accountStore;
+  const { loadUser, loggedInUser } = userStore;
+
   const [appwriteItemId, setAppwriteItemId] = React.useState<string | null>(
     null
   );
 
   React.useEffect(() => {
-    const fetchUser = async () => {
-      const user = await getLoggedInUser().catch((err) =>
-        console.error(err, "Error fetching user")
-      );
-      setLoggedInUser(user);
-    };
-
-    fetchUser();
-  }, []);
+    loadUser();
+  }, [loadUser]);
 
   React.useEffect(() => {
-    const fetchAccounts = async () => {
-      const accounts = await getAccounts({ userId: loggedInUser?.$id! }).catch(
-        (err) => console.error(err, "Error fetching accounts")
-      );
-      setAccounts(accounts);
-    };
-
-    if (loggedInUser) fetchAccounts();
-  }, [loggedInUser]);
+    if (loggedInUser) {
+      loadAccounts(loggedInUser?.$id!);
+    }
+  }, [loggedInUser, loadAccounts]);
 
   React.useEffect(() => {
     const appwriteItemId = (id as string) || accounts?.data[0]?.appwriteItemId;
@@ -45,21 +36,8 @@ const Home = ({ searchParams: { id, page } }: SearchParamProps) => {
   }, [accounts, id]);
 
   React.useEffect(() => {
-    const fetchAccount = async (id: string) => {
-      if (!id) return;
-      const account = await getAccount({ appwriteItemId: id }).catch((err) =>
-        console.error(err, "Error fetching account")
-      );
-      setAccount(account);
-    };
-
-    if (appwriteItemId) fetchAccount(appwriteItemId);
-  }, [appwriteItemId]);
-
-  console.log("loggedInUser:", loggedInUser);
-  console.log("appwriteItemId:", appwriteItemId);
-  console.log("account:", account);
-  console.log("accounts:", accounts);
+    if (appwriteItemId) loadAccount(appwriteItemId!);
+  }, [appwriteItemId, loadAccount]);
 
   const FullPageLoading = () => (
     <div className="flex items-center justify-center h-full">
@@ -104,6 +82,6 @@ const Home = ({ searchParams: { id, page } }: SearchParamProps) => {
       )}
     </section>
   );
-};
+});
 
 export default Home;

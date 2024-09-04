@@ -16,16 +16,18 @@ const SidebarFooter = ({ user, type = "desktop" }: FooterProps) => {
         console.error(err);
       });
   };
+
+  if (!user) return;
   return (
     <footer className="footer">
       <div className={type === "mobile" ? "footer_name-mobile" : "footer_name"}>
-        <p className="text-xl font-bold text-gray-700">{user?.name[0]}</p>
+        <p className="text-xl font-bold text-gray-700">{user?.firstName[0]}</p>
       </div>
       <div
         className={type === "mobile" ? "footer_email-mobile" : "footer_email"}
       >
         <p className="text-14 truncate font-normal text-gray-700">
-          {user?.name}
+          {user?.firstName} {user?.lastName}
         </p>
         <p className="text-14 truncate font-semibold text-gray-700">
           {user?.email}

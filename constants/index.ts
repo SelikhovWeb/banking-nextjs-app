@@ -129,7 +129,7 @@ export const transactionCategoryStyles = {
     chipBackgroundColor: "bg-[#ECFDF3]",
   },
   default: {
-    borderColor: "",
+    borderColor: "border-blue-500",
     backgroundColor: "bg-blue-500",
     textColor: "text-blue-700",
     chipBackgroundColor: "bg-inherit",

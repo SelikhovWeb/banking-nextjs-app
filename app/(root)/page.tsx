@@ -69,14 +69,14 @@ const Home = observer(({ searchParams: { id, page } }: SearchParamProps) => {
             accounts={accounts.data}
             transactions={account.transactions}
             appwriteItemId={appwriteItemId || ""}
-            page={1}
+            page={parseFloat(page as string) || 1}
           />
         )}
       </div>
       {accounts && (
         <RightSidebar
           user={loggedInUser}
-          transactions={accounts?.transactions}
+          transactions={account?.transactions}
           banks={accounts?.data?.slice(0, 2)}
         />
       )}

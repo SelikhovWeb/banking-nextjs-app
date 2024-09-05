@@ -60,7 +60,7 @@ declare type Account = {
   type: string;
   subtype: string;
   appwriteItemId: string;
-  sharableId: string;
+  shareableId: string;
 };
 
 declare type Transaction = {
@@ -253,7 +253,7 @@ declare interface DoughnutChartProps {
 }
 
 declare interface PaymentTransferFormProps {
-  accounts: Account[];
+  accounts: any;
 }
 
 // Actions
